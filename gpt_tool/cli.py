@@ -41,7 +41,7 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         results = export_bulk(text.splitlines(), args.format, out, args.proxy, args.workers)
         ok = sum(1 for r in results if r.ok)
-        print(f"done {ok}/{len(results)} → {out}")
+        print(f"done {ok}/{len(results)} -> {out}")
         for r in results:
             mark = "OK" if r.ok else "FAIL"
             print(f"  {mark} {r.email} {r.path or r.error}")
@@ -49,7 +49,7 @@ def main(argv: list[str] | None = None) -> int:
 
     text = Path(args.infile).read_text(encoding="utf-8")
     results = convert_bulk(text, args.format, out)
-    print(f"converted {len(results)} → {out}")
+    print(f"converted {len(results)} -> {out}")
     for r in results:
         print(f"  OK {r.email} {r.path}")
     return 0

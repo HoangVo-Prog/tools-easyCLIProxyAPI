@@ -1,4 +1,4 @@
-"""Chrome TLS client via curl_cffi — full browser headers, no trimming."""
+"""Chrome TLS client via curl_cffi - full browser headers, no trimming."""
 
 from __future__ import annotations
 

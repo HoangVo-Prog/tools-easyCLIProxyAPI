@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,11 +9,11 @@
 <body>
   <header>
     <h1>GPT-Tool</h1>
-    <p class="sub">Export Codex từ email|pass|2fa · convert JSON · không Veriphone / SMS. Chạy local trên máy bạn.</p>
+    <p class="sub">Export Codex from email|password|totp, convert JSON, and run locally on your machine. No Veriphone or SMS.</p>
   </header>
   <main>
     <section class="card">
-      <label>1. Chọn định dạng xuất (bắt buộc trước khi chạy)</label>
+      <label>1. Choose an output format (required before running)</label>
       <div class="formats" id="formats"></div>
     </section>
     <section class="card">
@@ -22,11 +22,11 @@
         <button type="button" data-tab="convert">Convert JSON</button>
       </div>
       <div id="tab-export">
-        <label>Mỗi dòng: email|password|totp</label>
+        <label>One account per line: email|password|totp</label>
         <textarea id="lines" placeholder="user@gmail.com|password|JBSWY3DPEHPK3PXP"></textarea>
         <div class="row">
           <div>
-            <label>Proxy (tuỳ chọn)</label>
+            <label>Proxy (optional)</label>
             <input type="text" id="proxy" placeholder="http://user:pass@host:port">
           </div>
           <div>
@@ -34,17 +34,17 @@
             <input type="number" id="workers" value="2" min="1" max="8">
           </div>
         </div>
-        <p class="warn">Token = mật khẩu. Chỉ dùng trên máy của bạn. Tài khoản đã ver phone vẫn có thể bị OpenAI bắt add-phone — tool sẽ báo lỗi và bỏ qua, không thuê SIM.</p>
+        <p class="warn">Tokens are equivalent to passwords. Use them only on your machine. OpenAI may still require add-phone during Codex OAuth; this tool reports the error and skips the account without renting SIMs.</p>
         <div class="actions">
-          <button type="button" class="primary" id="run-export">Chạy Export</button>
-          <button type="button" class="ghost" id="open-out">Mở thư mục out/</button>
+          <button type="button" class="primary" id="run-export">Run Export</button>
+          <button type="button" class="ghost" id="open-out">Open out/ folder</button>
         </div>
       </div>
       <div id="tab-convert" class="hidden">
-        <label>Dán JSON session / auth.json (1 hoặc nhiều tài khoản)</label>
+        <label>Paste session/auth JSON (one or more accounts)</label>
         <textarea id="json-in" placeholder='{"access_token":"...","email":"..."}'></textarea>
         <div class="actions">
-          <button type="button" class="primary" id="run-convert">Chạy Convert</button>
+          <button type="button" class="primary" id="run-convert">Run Convert</button>
         </div>
       </div>
     </section>
@@ -52,9 +52,9 @@
       <div class="log-head">
         <div class="log-title">
           <span class="spinner" id="log-spinner" hidden></span>
-          <label>Nhật ký từng dòng</label>
+          <label>Per-line log</label>
         </div>
-        <span id="live-summary" class="log-count">Chưa chạy.</span>
+        <span id="live-summary" class="log-count">Not started.</span>
       </div>
       <div class="log-progress" hidden id="log-progress"><i id="log-bar"></i></div>
       <ul id="line-log" class="line-log"></ul>

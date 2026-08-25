@@ -1,4 +1,4 @@
-"""Codex OAuth PKCE — no SMS / no add-phone handler."""
+"""Codex OAuth PKCE - no SMS / no add-phone handler."""
 
 from __future__ import annotations
 
@@ -27,9 +27,9 @@ AUTHORIZE_URL = "https://auth.openai.com/oauth/authorize"
 TOKEN_URL = "https://auth.openai.com/oauth/token"
 
 ADD_PHONE_MSG = (
-    "Tài khoản này vẫn bị OpenAI yêu cầu add-phone khi OAuth Codex. "
-    "Tool không thuê SIM / Veriphone. Bỏ qua tài khoản này. "
-    "This account still hit Codex add-phone; SMS is intentionally disabled."
+    "OpenAI still requires add-phone during Codex OAuth for this account. "
+    "This tool does not rent SIMs or use Veriphone. Skipping this account. "
+    "SMS handling is intentionally disabled."
 )
 
 
@@ -390,9 +390,9 @@ def _finish_codex_callback(session, auth: CodexAuthorize, start_url: str) -> Cod
     if not callback:
         hint = ""
         if "choose-an-account" in (final_url or "").lower():
-            hint = " (kẹt trang chọn tài khoản)"
+            hint = " (stuck on the account selection page)"
         elif "/log-in" in (final_url or "").lower():
-            hint = " (kẹt /log-in — password/MFA chưa xong trên cùng PKCE)"
+            hint = " (stuck on /log-in; password/MFA did not complete in the same PKCE flow)"
         raise OAuthError(f"codex OAuth no callback code, final={short(final_url, 180)}{hint}")
     return exchange_codex_callback_code(
         session,
@@ -405,7 +405,7 @@ def _finish_codex_callback(session, auth: CodexAuthorize, start_url: str) -> Cod
 
 
 def oauth_codex_with_password(session, creds, device_id: str) -> CodexTokens:
-    """One capture flow: authorize → password → MFA → workspace → callback."""
+    """One capture flow: authorize -> password -> MFA -> workspace -> callback."""
     from gpt_tool.login import LoginError, open_authorize, submit_auth_password_mfa
 
     auth = build_codex_authorize("login")

@@ -46,10 +46,10 @@ def ensure_deps() -> None:
         missing = True
     if not missing and chrome_supported():
         return
-    print("Đang tải thư viện (curl_cffi)… lần đầu có thể mất 1–2 phút.", flush=True)
+    print("Installing runtime libraries (curl_cffi); first run may take 1-2 minutes.", flush=True)
     _pip(*_specs())
     if chrome_supported():
         return
     _pip("--force-reinstall", "curl_cffi>=0.13.0,<0.15")
     if not chrome_supported():
-        print("Cảnh báo: curl_cffi không có Chrome impersonate. Thử: pip install -U 'curl_cffi>=0.13,<0.15'", flush=True)
+        print("Warning: curl_cffi does not provide Chrome impersonation. Try: pip install -U 'curl_cffi>=0.13,<0.15'", flush=True)

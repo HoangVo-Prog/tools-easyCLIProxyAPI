@@ -13,20 +13,20 @@ if %ERRORLEVEL%==0 (
   goto :okpy
 )
 :nopy
-echo Can Python 3.11+. Tai: https://www.python.org/downloads/
+echo Python 3.11+ is required. Download: https://www.python.org/downloads/
 pause
 exit /b 1
 
 :okpy
 if not exist .venv (
-  echo Dang tao moi truong .venv ...
+  echo Creating virtual environment .venv ...
   py -3 -m venv .venv 2>nul || python -m venv .venv
 )
 call .venv\Scripts\activate.bat
-echo Dang tai / cap nhat thu vien ...
+echo Installing/updating dependencies ...
 python -m pip install -q -U pip
 python -m pip install -q -U -r requirements.txt
 python -c "from gpt_tool.ensure_deps import ensure_deps; ensure_deps()"
-echo Mo GPT-Tool tren trinh duyet ...
+echo Opening GPT-Tool in your browser ...
 python -m gpt_tool.server
 pause

@@ -1,42 +1,43 @@
 # GPT-Tool
 
-Công cụ Python: đăng nhập ChatGPT bằng `email|password|totp`, lấy Codex OAuth **không Veriphone / không SMS**, rồi xuất **một file JSON mỗi tài khoản**. Cũng convert qua lại các format của [GPTSession2CPAandSub2API](https://github.com/gtxx3600/GPTSession2CPAandSub2API).
+Python tool: sign in to ChatGPT with `email|password|totp`, obtain Codex OAuth tokens **without Veriphone or SMS**, and export **one JSON file per account**. It also converts between formats used by [GPTSession2CPAandSub2API](https://github.com/gtxx3600/GPTSession2CPAandSub2API).
 
-Không chạy Rust. Không đăng ký tài khoản mới. Không thuê SIM.
+No Rust runtime. No account registration. No SIM rental.
 
-## 1-click (không cần biết code)
+## 1-click setup
 
-Cài [Python 3.11+](https://www.python.org/downloads/) trước (Windows: tick “Add Python to PATH”).
+Install [Python 3.11+](https://www.python.org/downloads/) first (Windows: enable "Add Python to PATH").
 
-| Máy | Làm gì |
+| System | What to run |
 | --- | --- |
-| macOS | Double-click `start.command` (lần đầu: chuột phải → Open) |
+| macOS | Double-click `start.command` (first run: right-click -> Open) |
 | Windows | Double-click `start.bat` |
 | Linux | `chmod +x start.sh && ./start.sh` |
 
-Cửa sổ sẽ tự tạo `.venv`, cài thư viện, mở trình duyệt `http://127.0.0.1:8765/`.
+The launcher creates `.venv`, installs dependencies, and opens `http://127.0.0.1:8765/`.
 
-1. Chọn format (CPA / Codex / sub2api / …).
-2. Tab **Export Codex**: dán `email|pass|2fa`, bấm Chạy.
-3. Tab **Convert JSON**: dán auth/session JSON có sẵn.
-4. File nằm trong thư mục `out/`.
+1. Choose an output format (CPA / Codex / sub2api / ...).
+2. On **Export Codex**, paste `email|password|totp`, then run the export.
+3. On **Convert JSON**, paste an existing auth/session JSON.
+4. Output files are written to `out/`.
 
 ## CLI
 
 ```bash
 python -m gpt_tool.cli export --format cpa --lines accounts.txt --out out
 python -m gpt_tool.cli convert --format codex --in session.json --out out
+bash export_cpa.sh accounts.txt
 ```
 
 Format: `cpa` `sub2api` `cockpit` `9router` `codex` `axonhub` `codexmanager`.
 
-## Nếu báo add-phone
+## If OpenAI asks for add-phone
 
-OpenAI vẫn có thể bắt bind phone lúc OAuth Codex dù web đã ver phone. Tool **cố ý không** thuê SIM. Bỏ qua tài khoản đó; lỗi ghi vào `out/failed.txt`.
+OpenAI may still require phone binding during Codex OAuth even if the web account is already phone-verified. This tool **intentionally does not** rent SIMs or use Veriphone. The account is skipped and the error is written to `out/failed.txt`.
 
-## Bảo mật
+## Security
 
-File JSON chứa `access_token` / `refresh_token` = mật khẩu. Không gửi cho người khác, không commit vào git (`out/` đã gitignore).
+Exported JSON files contain `access_token` / `refresh_token`, which should be treated like passwords. Do not share them and do not commit them to git.
 
 ## Dev
 

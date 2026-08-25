@@ -9,13 +9,13 @@ const FORMATS = [
 ];
 
 const STEP_LABEL = {
-  queued: "đang chờ worker",
-  parse: "đọc dòng",
-  login: "đang login",
-  oauth: "đang OAuth Codex",
-  refresh: "đang refresh token",
-  export: "đang ghi JSON",
-  done: "xong",
+  queued: "waiting for worker",
+  parse: "parsing line",
+  login: "logging in",
+  oauth: "running Codex OAuth",
+  refresh: "refreshing token",
+  export: "writing JSON",
+  done: "done",
 };
 
 const STORE_KEY = "gpt-tool-ui";
@@ -146,13 +146,13 @@ function renderLog(total, busy) {
   const summary = document.getElementById("live-summary");
   const running = items.filter((row) => row.state === "run").length;
   const slots = clampWorkers(document.getElementById("workers").value);
-  if (busy) summary.textContent = `${done}/${all} · ${running}/${slots} worker · ${ok} OK · ${fail} lỗi`;
-  else if (all) summary.textContent = `Xong ${done}/${all} · ${ok} OK · ${fail} lỗi`;
-  else summary.textContent = "Chưa chạy.";
+  if (busy) summary.textContent = `${done}/${all} | ${running}/${slots} worker | ${ok} OK | ${fail} failed`;
+  else if (all) summary.textContent = `Done ${done}/${all} | ${ok} OK | ${fail} failed`;
+  else summary.textContent = "Not started.";
   list.innerHTML = items
     .map((row) => {
       const pill = STEP_LABEL[row.step] || row.step || "";
-      const detail = row.state === "ok" ? row.path || "đã ghi file" : row.error || "";
+      const detail = row.state === "ok" ? row.path || "file written" : row.error || "";
       return `<li class="log-row ${row.state}">
         <span class="dot"></span>
         <div>
@@ -193,10 +193,10 @@ const runExport = document.getElementById("run-export");
 document.getElementById("run-export").addEventListener("click", async () => {
   const format = selectedFormat();
   if (!format) {
-    setStatus("Chọn định dạng ở bước 1 trước khi chạy.", "err");
+    setStatus("Choose a format in step 1 before running.", "err");
     return;
   }
-  if (!confirm("Token xuất ra là mật khẩu đăng nhập. Chỉ dùng trên máy của bạn. Tiếp tục?")) return;
+  if (!confirm("Exported tokens are equivalent to passwords. Use them only on your machine. Continue?")) return;
   savePrefs();
   runExport.disabled = true;
   seedRows(document.getElementById("lines").value);
@@ -216,7 +216,7 @@ document.getElementById("run-export").addEventListener("click", async () => {
   if (!res.ok) {
     runExport.disabled = false;
     renderLog(rows.size, false);
-    setStatus(data.error || "export lỗi", "err");
+    setStatus(data.error || "export failed", "err");
     return;
   }
   const id = data.id;
@@ -239,7 +239,7 @@ document.getElementById("run-export").addEventListener("click", async () => {
 document.getElementById("run-convert").addEventListener("click", async () => {
   const format = selectedFormat();
   if (!format) {
-    setStatus("Chọn định dạng ở bước 1 trước khi chạy.", "err");
+    setStatus("Choose a format in step 1 before running.", "err");
     return;
   }
   rows.clear();
@@ -253,7 +253,7 @@ document.getElementById("run-convert").addEventListener("click", async () => {
   const data = await res.json();
   if (!res.ok) {
     renderLog(0, false);
-    setStatus(data.error || "convert lỗi", "err");
+    setStatus(data.error || "convert failed", "err");
     return;
   }
   rows.clear();

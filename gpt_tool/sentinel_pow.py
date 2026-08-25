@@ -94,7 +94,7 @@ def build_config(user_agent: str) -> list[Any]:
         "vi-VN",
         "vi-VN,vi,fr-FR,fr,en-US,en",
         random.random(),
-        f"{random.choice(NAV_PROPS)}−undefined",
+        f"{random.choice(NAV_PROPS)}-undefined",
         random.choice(DOC_FIELDS),
         random.choice(GLOBAL_FIELDS),
         perf_now,

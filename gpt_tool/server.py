@@ -93,7 +93,7 @@ class Handler(BaseHTTPRequestHandler):
             fmt = (body.get("format") or "").strip()
             text = body.get("text") or ""
             if fmt not in FORMATS:
-                _json(self, 400, {"error": "chọn format trước khi chạy"})
+                _json(self, 400, {"error": "choose a format before running"})
                 return
             try:
                 results = [outcome_dict(o) for o in convert_bulk(text, fmt, OUT)]
@@ -105,7 +105,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/export":
             fmt = (body.get("format") or "").strip()
             if fmt not in FORMATS:
-                _json(self, 400, {"error": "chọn format trước khi chạy"})
+                _json(self, 400, {"error": "choose a format before running"})
                 return
             lines = (body.get("lines") or "").splitlines()
             proxy = (body.get("proxy") or "").strip() or None
@@ -171,7 +171,7 @@ def _bind(host: str, start_port: int, attempts: int = 20) -> tuple[ThreadingHTTP
             last = exc
             if getattr(exc, "errno", None) not in {48, 98, 10048}:
                 raise
-    raise OSError(f"hết cổng trống từ {start_port}–{start_port + attempts - 1}") from last
+    raise OSError(f"no free port from {start_port} to {start_port + attempts - 1}") from last
 
 
 def main() -> None:
@@ -183,8 +183,8 @@ def main() -> None:
     httpd, port = _bind(HOST, PORT)
     url = f"http://{HOST}:{port}/"
     if port != PORT:
-        print(f"Cổng {PORT} bận → dùng {port}.", flush=True)
-    print(f"GPT-Tool GUI → {url}", flush=True)
+        print(f"Port {PORT} is busy; using {port}.", flush=True)
+    print(f"GPT-Tool GUI -> {url}", flush=True)
     threading.Timer(0.6, lambda: webbrowser.open(url)).start()
     try:
         httpd.serve_forever()

@@ -106,7 +106,7 @@ textarea { min-height: 160px; resize: vertical; }
   overflow: auto;
 }
 .line-log:empty::after {
-  content: "Chưa có dòng nào. Dán email|pass|2fa rồi bấm Chạy Export.";
+  content: "No lines yet. Paste email|password|totp, then run the export.";
   display: block;
   color: var(--muted);
   font-size: 13px;

@@ -1,4 +1,4 @@
-"""Login → Codex OAuth → refresh → one JSON file per account."""
+"""Login -> Codex OAuth -> refresh -> one JSON file per account."""
 
 from __future__ import annotations
 
