@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -30,13 +31,14 @@ def write_json(out_dir: Path, email: str, body: object) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     name = sanitize_file_token(email.replace("@", "_at_"), "account") + ".json"
     dest = out_dir / name
-    n = 2
-    while dest.exists():
-        dest = out_dir / f"{sanitize_file_token(email.replace('@', '_at_'), 'account')}_{n}.json"
-        n += 1
-    tmp = dest.with_suffix(".json.tmp")
-    tmp.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    tmp.replace(dest)
+    # One stable path per email: refresh tokens by replacing the existing JSON.
+    # Unique temporary paths avoid clashes between concurrent export workers.
+    tmp = out_dir / f".{name}.{uuid.uuid4().hex}.tmp"
+    try:
+        tmp.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        tmp.replace(dest)
+    finally:
+        tmp.unlink(missing_ok=True)
     return dest
 
 
